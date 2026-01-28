@@ -7,7 +7,7 @@ import type { InsertMatchScenario, MatchScenario } from "@shared/schema";
 const { Pool } = pg;
 
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  connectionString: process.env.NETLIFY_DATABASE_URL || process.env.DATABASE_URL,
 });
 
 const db = drizzle({ client: pool, schema });
