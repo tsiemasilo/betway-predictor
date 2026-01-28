@@ -3,6 +3,9 @@
   publish = "dist/public"
   functions = "netlify/functions"
 
+[build.environment]
+  DATABASE_URL = "${NETLIFY_DATABASE_URL}"
+
 [[redirects]]
   from = "/api/fixtures"
   to = "/.netlify/functions/fixtures"
