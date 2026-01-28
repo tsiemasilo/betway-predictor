@@ -2,15 +2,12 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { predictionEngine } from "./prediction-engine";
 import { getFixtures, getTeams, type UCLTeam, type UCLTeamStats } from "./ucl-data";
-import { liveScoreEngine } from "./live-score-engine";
 import type { TeamStats } from "@shared/schema";
 
 export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
-  
-  liveScoreEngine.initialize(httpServer);
 
   // Get all UCL fixtures for tonight
   app.get("/api/fixtures", async (req, res) => {
@@ -76,17 +73,6 @@ export async function registerRoutes(
   // Health check
   app.get("/api/health", (req, res) => {
     res.json({ status: "ok", engine: "Monte Carlo (20k sims)", version: "2.0.0", factors: 100 });
-  });
-
-  // Get live scores
-  app.get("/api/live-scores", (req, res) => {
-    res.json(liveScoreEngine.getMatches());
-  });
-
-  // Reset live scores (for demo)
-  app.post("/api/live-scores/reset", (req, res) => {
-    liveScoreEngine.resetMatches();
-    res.json({ success: true });
   });
 
   return httpServer;
