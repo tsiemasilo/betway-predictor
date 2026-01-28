@@ -467,10 +467,388 @@ const teams: Record<string, UCLTeam> = {
       knockoutMentality: 4, clutchVsChoke: -1,
       pressureHandling: 3, teamBelief: 4, underdogMentality: 9
     }
+  },
+  clubBrugge: {
+    id: 19,
+    name: "Club Brugge",
+    shortName: "Club Brugge",
+    logo: "https://media.api-sports.io/football/teams/569.png",
+    stats: {
+      played: 7, won: 4, drawn: 1, lost: 2, goalsFor: 9, goalsAgainst: 7,
+      form: ['W','W','L','D','W'], cleanSheets: 3, xG: 8.5, xGA: 7.2,
+      comebackAbility: 6, leadProtection: 7, bigTeamPerformance: 5, consistency: 6,
+      currentStreak: 1, shotConversionRate: 0.11, chancesCreatedPerMatch: 2.8,
+      defensiveErrors: 2, pressurePerformance: 6, lateGoalsScored: 2, lateGoalsConceded: 1,
+      avgShots: 11, avgShotsOnTarget: 4, avgPossession: 48, avgCorners: 5, avgFouls: 11, avgYellowCards: 1.8,
+      squadDepth: 6, goalkeeperForm: 7, europeanExperience: 6, teamMorale: 7,
+      starPlayerFitness: 7, keyPlayerDependence: 5, paceThreat: 6,
+      tacticalStyle: 'counter', pressResistance: 6, midfieldControl: 5,
+      counterAttackThreat: 7, setPieceDefense: 6, setPieceAttack: 6, defensiveCompactness: 7,
+      managerUCLRecord: 5, managerKnockoutExperience: 4, clubEuropeanPedigree: 5,
+      knockoutMentality: 6, clutchVsChoke: 1,
+      pressureHandling: 6, teamBelief: 7, underdogMentality: 8
+    }
+  },
+  marseille: {
+    id: 20,
+    name: "Olympique Marseille",
+    shortName: "Marseille",
+    logo: "https://media.api-sports.io/football/teams/81.png",
+    stats: {
+      played: 7, won: 3, drawn: 2, lost: 2, goalsFor: 10, goalsAgainst: 9,
+      form: ['W','D','L','W','D'], cleanSheets: 2, xG: 9.8, xGA: 8.5,
+      comebackAbility: 6, leadProtection: 5, bigTeamPerformance: 5, consistency: 5,
+      currentStreak: 0, shotConversionRate: 0.11, chancesCreatedPerMatch: 3.0,
+      defensiveErrors: 3, pressurePerformance: 5, lateGoalsScored: 2, lateGoalsConceded: 2,
+      avgShots: 13, avgShotsOnTarget: 5, avgPossession: 52, avgCorners: 6, avgFouls: 12, avgYellowCards: 2.0,
+      squadDepth: 6, goalkeeperForm: 6, europeanExperience: 6, teamMorale: 6,
+      starPlayerFitness: 7, keyPlayerDependence: 5, paceThreat: 7,
+      tacticalStyle: 'balanced', pressResistance: 5, midfieldControl: 6,
+      counterAttackThreat: 6, setPieceDefense: 5, setPieceAttack: 6, defensiveCompactness: 5,
+      managerUCLRecord: 4, managerKnockoutExperience: 4, clubEuropeanPedigree: 6,
+      knockoutMentality: 5, clutchVsChoke: 0,
+      pressureHandling: 5, teamBelief: 6, underdogMentality: 6
+    }
+  },
+  atletico: {
+    id: 21,
+    name: "Atlético Madrid",
+    shortName: "Atlético",
+    logo: "https://media.api-sports.io/football/teams/530.png",
+    stats: {
+      played: 7, won: 5, drawn: 1, lost: 1, goalsFor: 14, goalsAgainst: 7,
+      form: ['W','W','D','W','W'], cleanSheets: 3, xG: 12.5, xGA: 7.0,
+      comebackAbility: 7, leadProtection: 9, bigTeamPerformance: 8, consistency: 8,
+      currentStreak: 2, shotConversionRate: 0.13, chancesCreatedPerMatch: 3.2,
+      defensiveErrors: 2, pressurePerformance: 8, lateGoalsScored: 3, lateGoalsConceded: 1,
+      avgShots: 12, avgShotsOnTarget: 5, avgPossession: 48, avgCorners: 5, avgFouls: 13, avgYellowCards: 2.2,
+      squadDepth: 8, goalkeeperForm: 8, europeanExperience: 9, teamMorale: 8,
+      starPlayerFitness: 8, keyPlayerDependence: 4, paceThreat: 7,
+      tacticalStyle: 'defensive', pressResistance: 8, midfieldControl: 7,
+      counterAttackThreat: 8, setPieceDefense: 9, setPieceAttack: 7, defensiveCompactness: 9,
+      managerUCLRecord: 8, managerKnockoutExperience: 9, clubEuropeanPedigree: 7,
+      knockoutMentality: 9, clutchVsChoke: 3,
+      pressureHandling: 8, teamBelief: 8, underdogMentality: 4
+    }
+  },
+  salzburg: {
+    id: 22,
+    name: "RB Salzburg",
+    shortName: "Salzburg",
+    logo: "https://media.api-sports.io/football/teams/571.png",
+    stats: {
+      played: 7, won: 2, drawn: 1, lost: 4, goalsFor: 7, goalsAgainst: 13,
+      form: ['L','W','L','L','W'], cleanSheets: 1, xG: 7.0, xGA: 12.0,
+      comebackAbility: 5, leadProtection: 4, bigTeamPerformance: 3, consistency: 4,
+      currentStreak: 1, shotConversionRate: 0.09, chancesCreatedPerMatch: 2.5,
+      defensiveErrors: 4, pressurePerformance: 5, lateGoalsScored: 2, lateGoalsConceded: 3,
+      avgShots: 11, avgShotsOnTarget: 4, avgPossession: 45, avgCorners: 4, avgFouls: 14, avgYellowCards: 2.3,
+      squadDepth: 5, goalkeeperForm: 5, europeanExperience: 5, teamMorale: 5,
+      starPlayerFitness: 6, keyPlayerDependence: 5, paceThreat: 7,
+      tacticalStyle: 'high_press', pressResistance: 5, midfieldControl: 5,
+      counterAttackThreat: 6, setPieceDefense: 4, setPieceAttack: 5, defensiveCompactness: 4,
+      managerUCLRecord: 4, managerKnockoutExperience: 3, clubEuropeanPedigree: 4,
+      knockoutMentality: 5, clutchVsChoke: 0,
+      pressureHandling: 5, teamBelief: 5, underdogMentality: 8
+    }
+  },
+  sporting: {
+    id: 23,
+    name: "Sporting CP",
+    shortName: "Sporting",
+    logo: "https://media.api-sports.io/football/teams/228.png",
+    stats: {
+      played: 7, won: 4, drawn: 1, lost: 2, goalsFor: 12, goalsAgainst: 8,
+      form: ['W','L','W','W','D'], cleanSheets: 2, xG: 11.2, xGA: 7.8,
+      comebackAbility: 6, leadProtection: 6, bigTeamPerformance: 6, consistency: 6,
+      currentStreak: 0, shotConversionRate: 0.12, chancesCreatedPerMatch: 3.2,
+      defensiveErrors: 3, pressurePerformance: 6, lateGoalsScored: 3, lateGoalsConceded: 2,
+      avgShots: 13, avgShotsOnTarget: 5, avgPossession: 54, avgCorners: 6, avgFouls: 11, avgYellowCards: 1.8,
+      squadDepth: 6, goalkeeperForm: 7, europeanExperience: 6, teamMorale: 7,
+      starPlayerFitness: 7, keyPlayerDependence: 5, paceThreat: 7,
+      tacticalStyle: 'balanced', pressResistance: 6, midfieldControl: 6,
+      counterAttackThreat: 7, setPieceDefense: 6, setPieceAttack: 6, defensiveCompactness: 6,
+      managerUCLRecord: 5, managerKnockoutExperience: 4, clubEuropeanPedigree: 5,
+      knockoutMentality: 6, clutchVsChoke: 1,
+      pressureHandling: 6, teamBelief: 7, underdogMentality: 7
+    }
+  },
+  bolognaPSG: {
+    id: 24,
+    name: "Bologna FC",
+    shortName: "Bologna",
+    logo: "https://media.api-sports.io/football/teams/500.png",
+    stats: {
+      played: 7, won: 1, drawn: 2, lost: 4, goalsFor: 5, goalsAgainst: 10,
+      form: ['L','D','L','W','L'], cleanSheets: 1, xG: 5.5, xGA: 9.5,
+      comebackAbility: 4, leadProtection: 5, bigTeamPerformance: 3, consistency: 4,
+      currentStreak: -1, shotConversionRate: 0.08, chancesCreatedPerMatch: 2.2,
+      defensiveErrors: 4, pressurePerformance: 4, lateGoalsScored: 1, lateGoalsConceded: 3,
+      avgShots: 10, avgShotsOnTarget: 3, avgPossession: 46, avgCorners: 4, avgFouls: 12, avgYellowCards: 2.0,
+      squadDepth: 5, goalkeeperForm: 5, europeanExperience: 3, teamMorale: 5,
+      starPlayerFitness: 6, keyPlayerDependence: 5, paceThreat: 6,
+      tacticalStyle: 'balanced', pressResistance: 4, midfieldControl: 5,
+      counterAttackThreat: 5, setPieceDefense: 5, setPieceAttack: 5, defensiveCompactness: 5,
+      managerUCLRecord: 2, managerKnockoutExperience: 1, clubEuropeanPedigree: 3,
+      knockoutMentality: 4, clutchVsChoke: -1,
+      pressureHandling: 4, teamBelief: 5, underdogMentality: 8
+    }
+  },
+  juventus: {
+    id: 25,
+    name: "Juventus",
+    shortName: "Juventus",
+    logo: "https://media.api-sports.io/football/teams/496.png",
+    stats: {
+      played: 7, won: 4, drawn: 2, lost: 1, goalsFor: 10, goalsAgainst: 6,
+      form: ['W','D','W','D','W'], cleanSheets: 3, xG: 9.5, xGA: 6.2,
+      comebackAbility: 6, leadProtection: 8, bigTeamPerformance: 7, consistency: 7,
+      currentStreak: 1, shotConversionRate: 0.11, chancesCreatedPerMatch: 2.8,
+      defensiveErrors: 2, pressurePerformance: 7, lateGoalsScored: 2, lateGoalsConceded: 1,
+      avgShots: 12, avgShotsOnTarget: 5, avgPossession: 52, avgCorners: 5, avgFouls: 11, avgYellowCards: 1.8,
+      squadDepth: 7, goalkeeperForm: 7, europeanExperience: 8, teamMorale: 7,
+      starPlayerFitness: 7, keyPlayerDependence: 4, paceThreat: 7,
+      tacticalStyle: 'defensive', pressResistance: 7, midfieldControl: 7,
+      counterAttackThreat: 7, setPieceDefense: 8, setPieceAttack: 6, defensiveCompactness: 8,
+      managerUCLRecord: 6, managerKnockoutExperience: 6, clubEuropeanPedigree: 8,
+      knockoutMentality: 7, clutchVsChoke: 1,
+      pressureHandling: 7, teamBelief: 7, underdogMentality: 3
+    }
+  },
+  monaco: {
+    id: 26,
+    name: "AS Monaco",
+    shortName: "Monaco",
+    logo: "https://media.api-sports.io/football/teams/91.png",
+    stats: {
+      played: 7, won: 4, drawn: 1, lost: 2, goalsFor: 11, goalsAgainst: 8,
+      form: ['W','L','W','W','D'], cleanSheets: 2, xG: 10.5, xGA: 7.8,
+      comebackAbility: 6, leadProtection: 6, bigTeamPerformance: 5, consistency: 6,
+      currentStreak: 0, shotConversionRate: 0.12, chancesCreatedPerMatch: 3.0,
+      defensiveErrors: 3, pressurePerformance: 6, lateGoalsScored: 2, lateGoalsConceded: 2,
+      avgShots: 13, avgShotsOnTarget: 5, avgPossession: 50, avgCorners: 5, avgFouls: 11, avgYellowCards: 1.8,
+      squadDepth: 6, goalkeeperForm: 6, europeanExperience: 5, teamMorale: 7,
+      starPlayerFitness: 7, keyPlayerDependence: 5, paceThreat: 8,
+      tacticalStyle: 'balanced', pressResistance: 6, midfieldControl: 6,
+      counterAttackThreat: 7, setPieceDefense: 5, setPieceAttack: 6, defensiveCompactness: 5,
+      managerUCLRecord: 4, managerKnockoutExperience: 4, clubEuropeanPedigree: 5,
+      knockoutMentality: 5, clutchVsChoke: 0,
+      pressureHandling: 6, teamBelief: 7, underdogMentality: 7
+    }
+  },
+  aston: {
+    id: 27,
+    name: "Aston Villa",
+    shortName: "Aston Villa",
+    logo: "https://media.api-sports.io/football/teams/66.png",
+    stats: {
+      played: 7, won: 4, drawn: 1, lost: 2, goalsFor: 10, goalsAgainst: 7,
+      form: ['W','W','L','D','W'], cleanSheets: 2, xG: 9.5, xGA: 7.0,
+      comebackAbility: 6, leadProtection: 7, bigTeamPerformance: 6, consistency: 6,
+      currentStreak: 1, shotConversionRate: 0.11, chancesCreatedPerMatch: 3.0,
+      defensiveErrors: 2, pressurePerformance: 6, lateGoalsScored: 2, lateGoalsConceded: 1,
+      avgShots: 12, avgShotsOnTarget: 5, avgPossession: 50, avgCorners: 5, avgFouls: 11, avgYellowCards: 1.8,
+      squadDepth: 6, goalkeeperForm: 7, europeanExperience: 4, teamMorale: 7,
+      starPlayerFitness: 7, keyPlayerDependence: 5, paceThreat: 7,
+      tacticalStyle: 'balanced', pressResistance: 6, midfieldControl: 6,
+      counterAttackThreat: 7, setPieceDefense: 6, setPieceAttack: 6, defensiveCompactness: 6,
+      managerUCLRecord: 5, managerKnockoutExperience: 4, clubEuropeanPedigree: 4,
+      knockoutMentality: 6, clutchVsChoke: 1,
+      pressureHandling: 6, teamBelief: 7, underdogMentality: 7
+    }
+  },
+  celtic: {
+    id: 28,
+    name: "Celtic FC",
+    shortName: "Celtic",
+    logo: "https://media.api-sports.io/football/teams/247.png",
+    stats: {
+      played: 7, won: 3, drawn: 1, lost: 3, goalsFor: 10, goalsAgainst: 11,
+      form: ['L','W','W','L','W'], cleanSheets: 2, xG: 9.2, xGA: 10.5,
+      comebackAbility: 6, leadProtection: 5, bigTeamPerformance: 4, consistency: 5,
+      currentStreak: 1, shotConversionRate: 0.11, chancesCreatedPerMatch: 2.8,
+      defensiveErrors: 4, pressurePerformance: 5, lateGoalsScored: 2, lateGoalsConceded: 3,
+      avgShots: 12, avgShotsOnTarget: 5, avgPossession: 52, avgCorners: 6, avgFouls: 11, avgYellowCards: 1.8,
+      squadDepth: 5, goalkeeperForm: 6, europeanExperience: 5, teamMorale: 6,
+      starPlayerFitness: 7, keyPlayerDependence: 5, paceThreat: 7,
+      tacticalStyle: 'high_press', pressResistance: 5, midfieldControl: 6,
+      counterAttackThreat: 6, setPieceDefense: 5, setPieceAttack: 6, defensiveCompactness: 5,
+      managerUCLRecord: 4, managerKnockoutExperience: 3, clubEuropeanPedigree: 6,
+      knockoutMentality: 5, clutchVsChoke: 0,
+      pressureHandling: 5, teamBelief: 7, underdogMentality: 8
+    }
+  },
+  leverkusen: {
+    id: 29,
+    name: "Bayer Leverkusen",
+    shortName: "Leverkusen",
+    logo: "https://media.api-sports.io/football/teams/168.png",
+    stats: {
+      played: 7, won: 5, drawn: 1, lost: 1, goalsFor: 13, goalsAgainst: 7,
+      form: ['W','W','D','W','W'], cleanSheets: 3, xG: 12.2, xGA: 7.0,
+      comebackAbility: 8, leadProtection: 7, bigTeamPerformance: 8, consistency: 8,
+      currentStreak: 2, shotConversionRate: 0.13, chancesCreatedPerMatch: 3.5,
+      defensiveErrors: 2, pressurePerformance: 8, lateGoalsScored: 4, lateGoalsConceded: 1,
+      avgShots: 15, avgShotsOnTarget: 6, avgPossession: 55, avgCorners: 6, avgFouls: 10, avgYellowCards: 1.5,
+      squadDepth: 8, goalkeeperForm: 7, europeanExperience: 7, teamMorale: 9,
+      starPlayerFitness: 8, keyPlayerDependence: 4, paceThreat: 8,
+      tacticalStyle: 'high_press', pressResistance: 8, midfieldControl: 8,
+      counterAttackThreat: 8, setPieceDefense: 7, setPieceAttack: 7, defensiveCompactness: 7,
+      managerUCLRecord: 6, managerKnockoutExperience: 5, clubEuropeanPedigree: 6,
+      knockoutMentality: 7, clutchVsChoke: 2,
+      pressureHandling: 8, teamBelief: 9, underdogMentality: 5
+    }
+  },
+  sparta: {
+    id: 30,
+    name: "Sparta Prague",
+    shortName: "Sparta",
+    logo: "https://media.api-sports.io/football/teams/558.png",
+    stats: {
+      played: 7, won: 2, drawn: 1, lost: 4, goalsFor: 7, goalsAgainst: 12,
+      form: ['L','L','W','D','L'], cleanSheets: 1, xG: 6.8, xGA: 11.5,
+      comebackAbility: 4, leadProtection: 5, bigTeamPerformance: 3, consistency: 4,
+      currentStreak: -1, shotConversionRate: 0.09, chancesCreatedPerMatch: 2.2,
+      defensiveErrors: 4, pressurePerformance: 4, lateGoalsScored: 1, lateGoalsConceded: 3,
+      avgShots: 10, avgShotsOnTarget: 4, avgPossession: 43, avgCorners: 4, avgFouls: 14, avgYellowCards: 2.3,
+      squadDepth: 5, goalkeeperForm: 5, europeanExperience: 4, teamMorale: 5,
+      starPlayerFitness: 6, keyPlayerDependence: 5, paceThreat: 6,
+      tacticalStyle: 'counter', pressResistance: 4, midfieldControl: 4,
+      counterAttackThreat: 6, setPieceDefense: 5, setPieceAttack: 5, defensiveCompactness: 5,
+      managerUCLRecord: 3, managerKnockoutExperience: 2, clubEuropeanPedigree: 4,
+      knockoutMentality: 4, clutchVsChoke: -1,
+      pressureHandling: 4, teamBelief: 5, underdogMentality: 8
+    }
+  },
+  feyenoord: {
+    id: 31,
+    name: "Feyenoord",
+    shortName: "Feyenoord",
+    logo: "https://media.api-sports.io/football/teams/215.png",
+    stats: {
+      played: 7, won: 3, drawn: 1, lost: 3, goalsFor: 12, goalsAgainst: 13,
+      form: ['W','L','W','L','D'], cleanSheets: 1, xG: 11.2, xGA: 12.0,
+      comebackAbility: 6, leadProtection: 4, bigTeamPerformance: 5, consistency: 5,
+      currentStreak: 0, shotConversionRate: 0.12, chancesCreatedPerMatch: 3.2,
+      defensiveErrors: 4, pressurePerformance: 5, lateGoalsScored: 3, lateGoalsConceded: 3,
+      avgShots: 13, avgShotsOnTarget: 5, avgPossession: 50, avgCorners: 6, avgFouls: 12, avgYellowCards: 2.0,
+      squadDepth: 5, goalkeeperForm: 5, europeanExperience: 5, teamMorale: 6,
+      starPlayerFitness: 6, keyPlayerDependence: 5, paceThreat: 7,
+      tacticalStyle: 'balanced', pressResistance: 5, midfieldControl: 6,
+      counterAttackThreat: 7, setPieceDefense: 4, setPieceAttack: 6, defensiveCompactness: 4,
+      managerUCLRecord: 4, managerKnockoutExperience: 3, clubEuropeanPedigree: 5,
+      knockoutMentality: 5, clutchVsChoke: 0,
+      pressureHandling: 5, teamBelief: 6, underdogMentality: 7
+    }
+  },
+  lille: {
+    id: 32,
+    name: "LOSC Lille",
+    shortName: "Lille",
+    logo: "https://media.api-sports.io/football/teams/79.png",
+    stats: {
+      played: 7, won: 4, drawn: 2, lost: 1, goalsFor: 11, goalsAgainst: 6,
+      form: ['W','D','W','W','D'], cleanSheets: 3, xG: 10.2, xGA: 6.5,
+      comebackAbility: 6, leadProtection: 7, bigTeamPerformance: 6, consistency: 7,
+      currentStreak: 0, shotConversionRate: 0.12, chancesCreatedPerMatch: 2.8,
+      defensiveErrors: 2, pressurePerformance: 7, lateGoalsScored: 2, lateGoalsConceded: 1,
+      avgShots: 11, avgShotsOnTarget: 5, avgPossession: 48, avgCorners: 5, avgFouls: 11, avgYellowCards: 1.8,
+      squadDepth: 6, goalkeeperForm: 7, europeanExperience: 6, teamMorale: 7,
+      starPlayerFitness: 7, keyPlayerDependence: 5, paceThreat: 7,
+      tacticalStyle: 'counter', pressResistance: 6, midfieldControl: 6,
+      counterAttackThreat: 7, setPieceDefense: 7, setPieceAttack: 6, defensiveCompactness: 7,
+      managerUCLRecord: 5, managerKnockoutExperience: 4, clubEuropeanPedigree: 5,
+      knockoutMentality: 6, clutchVsChoke: 1,
+      pressureHandling: 6, teamBelief: 7, underdogMentality: 7
+    }
+  },
+  stuttgart: {
+    id: 33,
+    name: "VfB Stuttgart",
+    shortName: "Stuttgart",
+    logo: "https://media.api-sports.io/football/teams/172.png",
+    stats: {
+      played: 7, won: 3, drawn: 1, lost: 3, goalsFor: 10, goalsAgainst: 10,
+      form: ['L','W','W','L','W'], cleanSheets: 2, xG: 9.5, xGA: 9.8,
+      comebackAbility: 5, leadProtection: 5, bigTeamPerformance: 5, consistency: 5,
+      currentStreak: 1, shotConversionRate: 0.11, chancesCreatedPerMatch: 3.0,
+      defensiveErrors: 3, pressurePerformance: 5, lateGoalsScored: 2, lateGoalsConceded: 2,
+      avgShots: 13, avgShotsOnTarget: 5, avgPossession: 52, avgCorners: 5, avgFouls: 11, avgYellowCards: 1.8,
+      squadDepth: 6, goalkeeperForm: 6, europeanExperience: 4, teamMorale: 6,
+      starPlayerFitness: 7, keyPlayerDependence: 5, paceThreat: 7,
+      tacticalStyle: 'high_press', pressResistance: 5, midfieldControl: 6,
+      counterAttackThreat: 6, setPieceDefense: 5, setPieceAttack: 6, defensiveCompactness: 5,
+      managerUCLRecord: 3, managerKnockoutExperience: 2, clubEuropeanPedigree: 4,
+      knockoutMentality: 5, clutchVsChoke: 0,
+      pressureHandling: 5, teamBelief: 6, underdogMentality: 7
+    }
+  },
+  redStar: {
+    id: 34,
+    name: "Red Star Belgrade",
+    shortName: "Red Star",
+    logo: "https://media.api-sports.io/football/teams/598.png",
+    stats: {
+      played: 7, won: 2, drawn: 0, lost: 5, goalsFor: 8, goalsAgainst: 16,
+      form: ['L','L','W','L','W'], cleanSheets: 1, xG: 7.5, xGA: 15.0,
+      comebackAbility: 4, leadProtection: 4, bigTeamPerformance: 3, consistency: 3,
+      currentStreak: 1, shotConversionRate: 0.09, chancesCreatedPerMatch: 2.2,
+      defensiveErrors: 5, pressurePerformance: 4, lateGoalsScored: 2, lateGoalsConceded: 4,
+      avgShots: 10, avgShotsOnTarget: 4, avgPossession: 40, avgCorners: 4, avgFouls: 15, avgYellowCards: 2.5,
+      squadDepth: 4, goalkeeperForm: 5, europeanExperience: 5, teamMorale: 5,
+      starPlayerFitness: 6, keyPlayerDependence: 6, paceThreat: 6,
+      tacticalStyle: 'counter', pressResistance: 4, midfieldControl: 4,
+      counterAttackThreat: 6, setPieceDefense: 4, setPieceAttack: 5, defensiveCompactness: 4,
+      managerUCLRecord: 3, managerKnockoutExperience: 2, clubEuropeanPedigree: 5,
+      knockoutMentality: 5, clutchVsChoke: -1,
+      pressureHandling: 4, teamBelief: 5, underdogMentality: 9
+    }
+  },
+  shakhtarDonetsk: {
+    id: 35,
+    name: "Shakhtar Donetsk",
+    shortName: "Shakhtar",
+    logo: "https://media.api-sports.io/football/teams/591.png",
+    stats: {
+      played: 7, won: 2, drawn: 2, lost: 3, goalsFor: 6, goalsAgainst: 9,
+      form: ['D','L','W','D','L'], cleanSheets: 2, xG: 6.2, xGA: 8.5,
+      comebackAbility: 5, leadProtection: 5, bigTeamPerformance: 4, consistency: 4,
+      currentStreak: -1, shotConversionRate: 0.09, chancesCreatedPerMatch: 2.4,
+      defensiveErrors: 3, pressurePerformance: 5, lateGoalsScored: 1, lateGoalsConceded: 2,
+      avgShots: 10, avgShotsOnTarget: 4, avgPossession: 48, avgCorners: 5, avgFouls: 12, avgYellowCards: 2.0,
+      squadDepth: 5, goalkeeperForm: 6, europeanExperience: 6, teamMorale: 5,
+      starPlayerFitness: 6, keyPlayerDependence: 5, paceThreat: 7,
+      tacticalStyle: 'balanced', pressResistance: 5, midfieldControl: 5,
+      counterAttackThreat: 6, setPieceDefense: 5, setPieceAttack: 5, defensiveCompactness: 5,
+      managerUCLRecord: 4, managerKnockoutExperience: 4, clubEuropeanPedigree: 5,
+      knockoutMentality: 5, clutchVsChoke: 0,
+      pressureHandling: 5, teamBelief: 5, underdogMentality: 7
+    }
+  },
+  brest: {
+    id: 36,
+    name: "Stade Brestois",
+    shortName: "Brest",
+    logo: "https://media.api-sports.io/football/teams/106.png",
+    stats: {
+      played: 7, won: 4, drawn: 2, lost: 1, goalsFor: 10, goalsAgainst: 6,
+      form: ['W','D','W','D','W'], cleanSheets: 3, xG: 9.2, xGA: 6.2,
+      comebackAbility: 6, leadProtection: 7, bigTeamPerformance: 6, consistency: 7,
+      currentStreak: 1, shotConversionRate: 0.11, chancesCreatedPerMatch: 2.8,
+      defensiveErrors: 2, pressurePerformance: 7, lateGoalsScored: 2, lateGoalsConceded: 1,
+      avgShots: 11, avgShotsOnTarget: 4, avgPossession: 46, avgCorners: 5, avgFouls: 12, avgYellowCards: 1.8,
+      squadDepth: 5, goalkeeperForm: 7, europeanExperience: 3, teamMorale: 8,
+      starPlayerFitness: 7, keyPlayerDependence: 5, paceThreat: 6,
+      tacticalStyle: 'counter', pressResistance: 6, midfieldControl: 5,
+      counterAttackThreat: 7, setPieceDefense: 7, setPieceAttack: 6, defensiveCompactness: 7,
+      managerUCLRecord: 3, managerKnockoutExperience: 2, clubEuropeanPedigree: 2,
+      knockoutMentality: 6, clutchVsChoke: 1,
+      pressureHandling: 6, teamBelief: 8, underdogMentality: 9
+    }
   }
 };
 
-// UCL Round 8 Fixtures - January 28-29, 2026
+// UCL Round 8 Fixtures - January 28-29, 2026 (All 18 matches)
 export const uclRound8Fixtures: UCLFixture[] = [
   {
     id: 1,
@@ -548,9 +926,90 @@ export const uclRound8Fixtures: UCLFixture[] = [
     id: 9,
     homeTeam: teams.dortmund,
     awayTeam: teams.inter,
-    date: "2026-01-29",
+    date: "2026-01-28",
     time: "21:00",
     venue: "Signal Iduna Park",
+    round: "League Phase - Round 8"
+  },
+  {
+    id: 10,
+    homeTeam: teams.clubBrugge,
+    awayTeam: teams.marseille,
+    date: "2026-01-28",
+    time: "21:00",
+    venue: "Jan Breydel Stadium",
+    round: "League Phase - Round 8"
+  },
+  {
+    id: 11,
+    homeTeam: teams.atletico,
+    awayTeam: teams.salzburg,
+    date: "2026-01-28",
+    time: "21:00",
+    venue: "Metropolitano",
+    round: "League Phase - Round 8"
+  },
+  {
+    id: 12,
+    homeTeam: teams.sporting,
+    awayTeam: teams.bolognaPSG,
+    date: "2026-01-28",
+    time: "21:00",
+    venue: "Estádio José Alvalade",
+    round: "League Phase - Round 8"
+  },
+  {
+    id: 13,
+    homeTeam: teams.juventus,
+    awayTeam: teams.monaco,
+    date: "2026-01-28",
+    time: "21:00",
+    venue: "Allianz Stadium",
+    round: "League Phase - Round 8"
+  },
+  {
+    id: 14,
+    homeTeam: teams.aston,
+    awayTeam: teams.celtic,
+    date: "2026-01-28",
+    time: "21:00",
+    venue: "Villa Park",
+    round: "League Phase - Round 8"
+  },
+  {
+    id: 15,
+    homeTeam: teams.leverkusen,
+    awayTeam: teams.sparta,
+    date: "2026-01-28",
+    time: "21:00",
+    venue: "BayArena",
+    round: "League Phase - Round 8"
+  },
+  {
+    id: 16,
+    homeTeam: teams.feyenoord,
+    awayTeam: teams.lille,
+    date: "2026-01-28",
+    time: "21:00",
+    venue: "De Kuip",
+    round: "League Phase - Round 8"
+  },
+  {
+    id: 17,
+    homeTeam: teams.stuttgart,
+    awayTeam: teams.redStar,
+    date: "2026-01-28",
+    time: "21:00",
+    venue: "MHPArena",
+    round: "League Phase - Round 8"
+  },
+  {
+    id: 18,
+    homeTeam: teams.shakhtarDonetsk,
+    awayTeam: teams.brest,
+    date: "2026-01-28",
+    time: "21:00",
+    venue: "Arena Lviv",
     round: "League Phase - Round 8"
   }
 ];
