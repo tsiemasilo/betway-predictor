@@ -1,11 +1,21 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Progress } from "@/components/ui/progress";
-import { Loader2, Target, TrendingUp, Activity, AlertCircle } from "lucide-react";
+import { Loader2, Target, TrendingUp, Activity, AlertCircle, Radio } from "lucide-react";
 import type { PredictionResult } from "@shared/schema";
+
+interface LiveMatch {
+  fixtureId: number;
+  homeTeam: string;
+  awayTeam: string;
+  homeScore: number;
+  awayScore: number;
+  minute: number;
+  status: 'not_started' | 'first_half' | 'half_time' | 'second_half' | 'full_time';
+}
 
 interface UCLTeam {
   id: number;
@@ -39,6 +49,38 @@ interface DetailedPrediction {
 
 export default function Home() {
   const [selectedFixture, setSelectedFixture] = useState<number | null>(null);
+  const [liveMatches, setLiveMatches] = useState<Map<number, LiveMatch>>(new Map());
+  const [isConnected, setIsConnected] = useState(false);
+
+  useEffect(() => {
+    const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const ws = new WebSocket(`${wsProtocol}//${window.location.host}/ws/live-scores`);
+
+    ws.onopen = () => {
+      console.log('Connected to live scores');
+      setIsConnected(true);
+    };
+
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      if (data.type === 'initial' || data.type === 'update') {
+        const matchMap = new Map<number, LiveMatch>();
+        data.matches.forEach((match: LiveMatch) => {
+          matchMap.set(match.fixtureId, match);
+        });
+        setLiveMatches(matchMap);
+      }
+    };
+
+    ws.onclose = () => {
+      console.log('Disconnected from live scores');
+      setIsConnected(false);
+    };
+
+    return () => {
+      ws.close();
+    };
+  }, []);
 
   const { data: fixtures, isLoading } = useQuery({
     queryKey: ["fixtures"],
