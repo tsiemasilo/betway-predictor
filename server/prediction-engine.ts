@@ -70,62 +70,44 @@ export class PredictionEngine {
     return Math.max(0.3, strength);
   }
 
-  // Calculate expected goals for a team
+  // Calculate expected goals for a team (realistic UCL range: 0.5 - 2.5)
   private calculateExpectedGoals(
     attackingStats: TeamStats,
     defendingStats: TeamStats,
     isHome: boolean,
     h2hModifier: number
   ): number {
-    const attackStrength = this.calculateStrength(attackingStats, isHome);
-    const defenseStrength = this.calculateStrength(defendingStats, !isHome);
+    // UCL league average is ~1.4 goals per team per match
+    const UCL_AVG_GOALS_PER_TEAM = 1.4;
+    
+    // Calculate attack strength relative to league average
+    const attackRate = attackingStats.matchesPlayed > 0
+      ? attackingStats.goalsFor / attackingStats.matchesPlayed / UCL_AVG_GOALS_PER_TEAM
+      : 1.0;
 
-    // Base attack rate
-    let attackRate = attackingStats.matchesPlayed > 0
-      ? attackingStats.goalsFor / attackingStats.matchesPlayed
-      : 1.2;
+    // Calculate defense weakness relative to league average (how many they concede)
+    const defenseWeakness = defendingStats.matchesPlayed > 0
+      ? defendingStats.goalsAgainst / defendingStats.matchesPlayed / UCL_AVG_GOALS_PER_TEAM
+      : 1.0;
 
-    // Defense rate
-    let defenseRate = defendingStats.matchesPlayed > 0
-      ? defendingStats.goalsAgainst / defendingStats.matchesPlayed
-      : 1.2;
+    // Form bonus (last 5 results: W=3, D=1, L=0 points, max 15)
+    const formPoints = attackingStats.last5Results.reduce((sum, r) => 
+      sum + (r === 'W' ? 3 : r === 'D' ? 1 : 0), 0);
+    const formMultiplier = 0.9 + (formPoints / 15) * 0.2; // Range: 0.9 to 1.1
 
-    // Apply home advantage
+    // Expected goals = league avg * attack strength * opponent defense weakness * form
+    let lambda = UCL_AVG_GOALS_PER_TEAM * attackRate * defenseWeakness * formMultiplier;
+
+    // Home advantage: +10% for home team
     if (isHome) {
-      attackRate *= (1 + this.HOME_ADVANTAGE);
+      lambda *= 1.10;
     }
 
-    // Recent form weight
-    const recentGoals = attackingStats.last5Results.length > 0
-      ? attackingStats.last5GoalsFor / 5
-      : attackRate;
-    attackRate = attackRate * 0.6 + recentGoals * 0.4;
+    // H2H modifier (very small impact)
+    lambda *= (1 + h2hModifier * 0.5);
 
-    // Expected goals
-    let lambda = (attackRate * defenseRate * attackStrength) / defenseStrength;
-    lambda = lambda * (this.UCL_BASELINE_GOALS / 2.5);
-
-    // H2H modifier
-    lambda *= (1 + h2hModifier);
-
-    // Squad impact
-    const squadStrength = this.calculateSquadStrength(attackingStats);
-    lambda *= squadStrength;
-
-    // Manager form
-    lambda *= (attackingStats.managerForm / 10) * 0.2 + 0.8;
-
-    // Context factors
-    if (attackingStats.mustWin) {
-      lambda *= 1.15;
-    }
-    lambda *= 1 + (attackingStats.importanceLevel - 5) * 0.02;
-
-    // Fatigue
-    const fatigueImpact = (attackingStats.restDays < 3 ? 0.95 : 1.0) * (1 - attackingStats.travelFatigue / 100);
-    lambda *= fatigueImpact;
-
-    return Math.max(0.3, lambda);
+    // Clamp to realistic range: 0.5 to 2.8 expected goals
+    return Math.min(2.8, Math.max(0.5, lambda));
   }
 
   // Calculate squad strength from players
@@ -162,35 +144,33 @@ export class PredictionEngine {
     const lambdaHome = this.calculateExpectedGoals(homeStats, awayStats, true, h2hHomeModifier);
     const lambdaAway = this.calculateExpectedGoals(awayStats, homeStats, false, h2hAwayModifier);
 
-    const homeGoals = this.poissonRandom(lambdaHome);
-    const awayGoals = this.poissonRandom(lambdaAway);
+    // Goals (capped at 6 per team for realism)
+    const homeGoals = Math.min(6, this.poissonRandom(lambdaHome));
+    const awayGoals = Math.min(6, this.poissonRandom(lambdaAway));
 
-    // Shots and shots on target
-    const homeShots = this.poissonRandom(homeStats.avgShots * (lambdaHome / 1.5));
-    const awayShots = this.poissonRandom(awayStats.avgShots * (lambdaAway / 1.5));
-    const homeShotsOnTarget = Math.min(homeShots, this.poissonRandom(homeStats.avgShotsOnTarget * (lambdaHome / 1.5)));
-    const awayShotsOnTarget = Math.min(awayShots, this.poissonRandom(awayStats.avgShotsOnTarget * (lambdaAway / 1.5)));
+    // Shots: Use team averages directly (typically 10-18 per team)
+    const homeShots = this.poissonRandom(homeStats.avgShots || 12);
+    const awayShots = this.poissonRandom(awayStats.avgShots || 12);
+    
+    // Shots on target: ~40% of total shots
+    const homeShotsOnTarget = Math.min(homeShots, this.poissonRandom((homeStats.avgShotsOnTarget || 5)));
+    const awayShotsOnTarget = Math.min(awayShots, this.poissonRandom((awayStats.avgShotsOnTarget || 5)));
 
-    // Corners
-    const homeCornerBase = homeStats.avgCorners * (homeStats.crossingTendency / 5) * (awayStats.defensivePressure / 5);
-    const awayCornerBase = awayStats.avgCorners * (awayStats.crossingTendency / 5) * (homeStats.defensivePressure / 5);
-    const homeCorners = this.poissonRandom(homeCornerBase);
-    const awayCorners = this.poissonRandom(awayCornerBase);
+    // Corners: typically 4-8 per team
+    const homeCorners = this.poissonRandom(homeStats.avgCorners || 5);
+    const awayCorners = this.poissonRandom(awayStats.avgCorners || 5);
 
-    // Fouls
-    const homeFoulBase = homeStats.avgFouls * (1 + (homeStats.importanceLevel - 5) / 10) * (homeStats.refereeStrictness / 5);
-    const awayFoulBase = awayStats.avgFouls * (1 + (awayStats.importanceLevel - 5) / 10) * (awayStats.refereeStrictness / 5);
-    const homeFouls = this.poissonRandom(homeFoulBase);
-    const awayFouls = this.poissonRandom(awayFoulBase);
+    // Fouls: typically 10-15 per team
+    const homeFouls = this.poissonRandom(homeStats.avgFouls || 11);
+    const awayFouls = this.poissonRandom(awayStats.avgFouls || 11);
 
-    // Cards
-    const homeCardRate = (homeFouls / homeStats.avgFouls) * (homeStats.avgYellowCards) * (11 - homeStats.discipline) / 10;
-    const awayCardRate = (awayFouls / awayStats.avgFouls) * (awayStats.avgYellowCards) * (11 - awayStats.discipline) / 10;
-    const homeYellowCards = this.poissonRandom(homeCardRate);
-    const awayYellowCards = this.poissonRandom(awayCardRate);
+    // Yellow cards: typically 1-3 per team
+    const homeYellowCards = this.poissonRandom(homeStats.avgYellowCards || 1.8);
+    const awayYellowCards = this.poissonRandom(awayStats.avgYellowCards || 1.8);
 
-    const homeRedCards = Math.random() < (homeStats.avgRedCards * (11 - homeStats.discipline) / 10) ? 1 : 0;
-    const awayRedCards = Math.random() < (awayStats.avgRedCards * (11 - awayStats.discipline) / 10) ? 1 : 0;
+    // Red cards: rare (~5% chance per team)
+    const homeRedCards = Math.random() < 0.05 ? 1 : 0;
+    const awayRedCards = Math.random() < 0.05 ? 1 : 0;
 
     return {
       homeGoals,
