@@ -1,0 +1,10 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist/public",
+  "framework": "vite",
+  "rewrites": [
+    { "source": "/api/fixtures", "destination": "/api/fixtures" },
+    { "source": "/api/fixtures/:id/prediction", "destination": "/api/prediction/[id]" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
