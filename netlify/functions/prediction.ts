@@ -1,34 +1,37 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
+import type { Handler } from '@netlify/functions';
 import { predictionEngine } from '../../server/prediction-engine';
 import { getFixtures, type UCLTeam } from '../../server/ucl-data';
 import type { TeamStats } from '../../shared/schema';
 
-export default function handler(req: VercelRequest, res: VercelResponse) {
-  if (req.method !== 'GET') {
-    return res.status(405).json({ message: 'Method not allowed' });
+export const handler: Handler = async (event) => {
+  if (event.httpMethod !== 'GET') {
+    return { statusCode: 405, body: 'Method Not Allowed' };
   }
 
   try {
-    const { id } = req.query;
-    const fixtureId = parseInt(id as string);
+    const pathParts = event.path.split('/');
+    const idIndex = pathParts.findIndex(p => p === 'prediction') - 1;
+    const fixtureId = parseInt(pathParts[idIndex] || event.queryStringParameters?.id || '0');
+    
     const fixture = getFixtures().find(f => f.id === fixtureId);
     
     if (!fixture) {
-      return res.status(404).json({ message: 'Fixture not found' });
+      return { statusCode: 404, body: JSON.stringify({ message: 'Fixture not found' }) };
     }
 
     const homeStats = convertToTeamStats(fixture.homeTeam, true);
     const awayStats = convertToTeamStats(fixture.awayTeam, false);
     const prediction = predictionEngine.predict(homeStats, awayStats);
 
-    res.status(200).json({
-      fixture,
-      prediction
-    });
+    return {
+      statusCode: 200,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ fixture, prediction })
+    };
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    return { statusCode: 500, body: JSON.stringify({ message: error.message }) };
   }
-}
+};
 
 function convertToTeamStats(team: UCLTeam, isHome: boolean): TeamStats {
   const s = team.stats;

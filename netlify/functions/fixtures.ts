@@ -1,11 +1,11 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { predictionEngine } from '../server/prediction-engine';
-import { getFixtures, type UCLTeam } from '../server/ucl-data';
-import type { TeamStats } from '../shared/schema';
+import type { Handler } from '@netlify/functions';
+import { predictionEngine } from '../../server/prediction-engine';
+import { getFixtures, type UCLTeam } from '../../server/ucl-data';
+import type { TeamStats } from '../../shared/schema';
 
-export default function handler(req: VercelRequest, res: VercelResponse) {
-  if (req.method !== 'GET') {
-    return res.status(405).json({ message: 'Method not allowed' });
+export const handler: Handler = async (event) => {
+  if (event.httpMethod !== 'GET') {
+    return { statusCode: 405, body: 'Method Not Allowed' };
   }
 
   try {
@@ -28,11 +28,15 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
       };
     });
     
-    res.status(200).json(fixturesWithPredictions);
+    return {
+      statusCode: 200,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(fixturesWithPredictions)
+    };
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    return { statusCode: 500, body: JSON.stringify({ message: error.message }) };
   }
-}
+};
 
 function convertToTeamStats(team: UCLTeam, isHome: boolean): TeamStats {
   const s = team.stats;
