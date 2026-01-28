@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Progress } from "@/components/ui/progress";
 import { Loader2, Target, TrendingUp, Activity, AlertCircle } from "lucide-react";
+import { SplashScreen } from "@/components/SplashScreen";
 import type { PredictionResult } from "@shared/schema";
 
 interface UCLTeam {
@@ -39,6 +40,13 @@ interface DetailedPrediction {
 
 export default function Home() {
   const [selectedFixture, setSelectedFixture] = useState<number | null>(null);
+  const [showSplash, setShowSplash] = useState(true);
+  const [showContent, setShowContent] = useState(false);
+
+  const handleSplashComplete = useCallback(() => {
+    setShowSplash(false);
+    setTimeout(() => setShowContent(true), 100);
+  }, []);
 
   const { data: fixtures, isLoading } = useQuery({
     queryKey: ["fixtures"],
@@ -60,85 +68,97 @@ export default function Home() {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#1a0a2e] via-[#16213e] to-[#0f0f23]">
-      {/* Header */}
-      <header className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-purple-900/50 via-blue-900/50 to-purple-900/50" />
-        <div className="relative container mx-auto px-4 py-8">
-          <h1 className="text-4xl md:text-5xl font-black text-center bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 bg-clip-text text-transparent tracking-wider">
-            Champions League Round 8
-          </h1>
-          <p className="text-center text-purple-300/70 mt-2 text-sm">
-            Tonight's Fixtures • January 28, 2026
-          </p>
-        </div>
-      </header>
-
-      {/* Fixtures */}
-      <main className="container mx-auto px-4 py-6 max-w-2xl">
-        {isLoading && (
-          <div className="flex justify-center py-20">
-            <Loader2 className="h-8 w-8 animate-spin text-purple-400" />
+    <>
+      {showSplash && <SplashScreen onComplete={handleSplashComplete} duration={4000} />}
+      
+      <div className={`min-h-screen bg-gradient-to-b from-[#1a0a2e] via-[#16213e] to-[#0f0f23] transition-opacity duration-700 ${showContent ? 'opacity-100' : 'opacity-0'}`}>
+        {/* Header */}
+        <header className={`relative overflow-hidden transition-all duration-700 delay-100 ${showContent ? 'translate-y-0 opacity-100' : '-translate-y-8 opacity-0'}`}>
+          <div className="absolute inset-0 bg-gradient-to-r from-purple-900/50 via-blue-900/50 to-purple-900/50" />
+          <div className="relative container mx-auto px-4 py-8">
+            <h1 className="text-4xl md:text-5xl font-black text-center bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 bg-clip-text text-transparent tracking-wider">
+              Champions League Round 8
+            </h1>
+            <p className="text-center text-purple-300/70 mt-2 text-sm">
+              Tonight's Fixtures • January 28, 2026
+            </p>
           </div>
-        )}
+        </header>
 
-        <div className="space-y-3">
-          {fixtures?.map((fixture) => (
-            <Card
-              key={fixture.id}
-              className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/15 transition-all cursor-pointer overflow-hidden"
-              onClick={() => setSelectedFixture(fixture.id)}
-              data-testid={`fixture-card-${fixture.id}`}
-            >
-              <div className="flex items-center p-4">
-                {/* Home Team */}
-                <div className="flex-1 flex items-center gap-3">
-                  <img
-                    src={fixture.homeTeam.logo}
-                    alt={fixture.homeTeam.name}
-                    className="w-12 h-12 object-contain"
-                    onError={(e) => { (e.target as HTMLImageElement).src = 'https://via.placeholder.com/48?text=' + fixture.homeTeam.shortName.charAt(0); }}
-                  />
-                  <span className="font-bold text-white text-sm md:text-base truncate" data-testid={`home-team-${fixture.id}`}>
-                    {fixture.homeTeam.shortName}
-                  </span>
+        {/* Fixtures */}
+        <main className="container mx-auto px-4 py-6 max-w-2xl">
+          {isLoading && (
+            <div className="flex justify-center py-20">
+              <Loader2 className="h-8 w-8 animate-spin text-purple-400" />
+            </div>
+          )}
+
+          <div className="space-y-3">
+            {fixtures?.map((fixture, index) => (
+              <Card
+                key={fixture.id}
+                className={`bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/15 hover:scale-[1.02] hover:shadow-lg hover:shadow-purple-500/20 transition-all duration-300 cursor-pointer overflow-hidden ${
+                  showContent 
+                    ? 'translate-y-0 opacity-100' 
+                    : 'translate-y-8 opacity-0'
+                }`}
+                style={{ 
+                  transitionDelay: showContent ? `${150 + index * 80}ms` : '0ms'
+                }}
+                onClick={() => setSelectedFixture(fixture.id)}
+                data-testid={`fixture-card-${fixture.id}`}
+              >
+                <div className="flex items-center p-4">
+                  {/* Home Team */}
+                  <div className="flex-1 flex items-center gap-3">
+                    <img
+                      src={fixture.homeTeam.logo}
+                      alt={fixture.homeTeam.name}
+                      className="w-12 h-12 object-contain"
+                      onError={(e) => { (e.target as HTMLImageElement).src = 'https://via.placeholder.com/48?text=' + fixture.homeTeam.shortName.charAt(0); }}
+                    />
+                    <span className="font-bold text-white text-sm md:text-base truncate" data-testid={`home-team-${fixture.id}`}>
+                      {fixture.homeTeam.shortName}
+                    </span>
+                  </div>
+
+                  {/* Score Prediction */}
+                  <div className="flex items-center gap-2 px-4">
+                    <span className="text-3xl font-black text-white" data-testid={`home-score-${fixture.id}`}>
+                      {fixture.prediction.homeGoals}
+                    </span>
+                    <span className="text-2xl font-light text-white/50">:</span>
+                    <span className="text-3xl font-black text-white" data-testid={`away-score-${fixture.id}`}>
+                      {fixture.prediction.awayGoals}
+                    </span>
+                  </div>
+
+                  {/* Away Team */}
+                  <div className="flex-1 flex items-center justify-end gap-3">
+                    <span className="font-bold text-white text-sm md:text-base truncate text-right" data-testid={`away-team-${fixture.id}`}>
+                      {fixture.awayTeam.shortName}
+                    </span>
+                    <img
+                      src={fixture.awayTeam.logo}
+                      alt={fixture.awayTeam.name}
+                      className="w-12 h-12 object-contain"
+                      onError={(e) => { (e.target as HTMLImageElement).src = 'https://via.placeholder.com/48?text=' + fixture.awayTeam.shortName.charAt(0); }}
+                    />
+                  </div>
                 </div>
+              </Card>
+            ))}
+          </div>
 
-                {/* Score Prediction */}
-                <div className="flex items-center gap-2 px-4">
-                  <span className="text-3xl font-black text-white" data-testid={`home-score-${fixture.id}`}>
-                    {fixture.prediction.homeGoals}
-                  </span>
-                  <span className="text-2xl font-light text-white/50">:</span>
-                  <span className="text-3xl font-black text-white" data-testid={`away-score-${fixture.id}`}>
-                    {fixture.prediction.awayGoals}
-                  </span>
-                </div>
-
-                {/* Away Team */}
-                <div className="flex-1 flex items-center justify-end gap-3">
-                  <span className="font-bold text-white text-sm md:text-base truncate text-right" data-testid={`away-team-${fixture.id}`}>
-                    {fixture.awayTeam.shortName}
-                  </span>
-                  <img
-                    src={fixture.awayTeam.logo}
-                    alt={fixture.awayTeam.name}
-                    className="w-12 h-12 object-contain"
-                    onError={(e) => { (e.target as HTMLImageElement).src = 'https://via.placeholder.com/48?text=' + fixture.awayTeam.shortName.charAt(0); }}
-                  />
-                </div>
-              </div>
-            </Card>
-          ))}
-        </div>
-
-        {/* Disclaimer */}
-        <div className="mt-8 p-4 rounded-lg bg-red-500/10 border border-red-500/30">
-          <p className="text-xs text-red-300/80 text-center">
-            <strong>Disclaimer:</strong> Predictions are for entertainment only. Not gambling advice.
-          </p>
-        </div>
-      </main>
+          {/* Disclaimer */}
+          <div className={`mt-8 p-4 rounded-lg bg-red-500/10 border border-red-500/30 transition-all duration-500 ${
+            showContent ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+          }`} style={{ transitionDelay: showContent ? '1800ms' : '0ms' }}>
+            <p className="text-xs text-red-300/80 text-center">
+              <strong>Disclaimer:</strong> Predictions are for entertainment only. Not gambling advice.
+            </p>
+          </div>
+        </main>
 
       {/* Detail Modal */}
       <Dialog open={!!selectedFixture} onOpenChange={() => setSelectedFixture(null)}>
@@ -284,7 +304,8 @@ export default function Home() {
           )}
         </DialogContent>
       </Dialog>
-    </div>
+      </div>
+    </>
   );
 }
 
