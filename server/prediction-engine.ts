@@ -267,6 +267,41 @@ export class PredictionEngine {
     return score;
   }
 
+  // Market Score (Factors 81-90): Betting market insights
+  private calculateMarketScore(stats: TeamStats): number {
+    let score = 0;
+    
+    // Factor 81: Odds movement (positive = odds shortening = market backing)
+    score += (stats.oddsMovement || 0) / 100;
+    
+    // Factor 82: Sharp money direction
+    score += (stats.sharpMoneyDirection || 0) / 50;
+    
+    // Factor 83: Public betting bias (contrarian value in fading public)
+    score -= (stats.publicBettingBias || 0) / 100;
+    
+    // Factor 84: Last result overreaction (market overreacts)
+    score -= (stats.lastResultOverreaction || 0) / 100;
+    
+    // Factor 85: Defensive underrating (market undervalues defense)
+    score += (stats.defensiveUnderrating || 0) / 50;
+    
+    // Factor 86: Media hype impact
+    score -= (stats.mediaHypeImpact || 0) / 100;
+    
+    // Factor 87: Implied probability vs true probability
+    // Higher implied = market favorite, slight negative to account for juice
+    score -= ((stats.impliedProbability || 33) - 33) / 1000;
+    
+    // Factor 89: Big name overconfidence (market loves big names too much)
+    score -= (stats.bigNameOverconfidence || 0) / 50;
+    
+    // Factor 90: Trap odds risk
+    if (stats.trapOddsRisk) score -= 0.02;
+    
+    return score;
+  }
+
   // Psychology Score (Factors 91-100)
   private calculatePsychologyScore(stats: TeamStats, isHome: boolean): number {
     let score = 0;
@@ -330,19 +365,20 @@ export class PredictionEngine {
       ? (defendingStats.goalsAgainst / defendingStats.matchesPlayed) / this.UCL_AVG_GOALS_PER_TEAM
       : 1.0;
 
-    // Calculate all factor modifiers
-    const formModifier = 1 + this.calculateFormScore(attackingStats);
-    const contextModifier = 1 + this.calculateContextScore(attackingStats, isHome);
-    const squadModifier = 1 + this.calculateSquadScore(attackingStats);
-    const tacticalModifier = 1 + this.calculateTacticalScore(attackingStats, defendingStats);
-    const managerModifier = 1 + this.calculateManagerScore(attackingStats);
-    const psychologyModifier = 1 + this.calculatePsychologyScore(attackingStats, isHome);
+    // Calculate all factor modifiers (all 100 factors organized into 7 categories)
+    const formModifier = 1 + this.calculateFormScore(attackingStats);           // Factors 1-20
+    const contextModifier = 1 + this.calculateContextScore(attackingStats, isHome); // Factors 21-35
+    const squadModifier = 1 + this.calculateSquadScore(attackingStats);         // Factors 36-55
+    const tacticalModifier = 1 + this.calculateTacticalScore(attackingStats, defendingStats); // Factors 56-70
+    const managerModifier = 1 + this.calculateManagerScore(attackingStats);     // Factors 71-80
+    const marketModifier = 1 + this.calculateMarketScore(attackingStats);       // Factors 81-90
+    const psychologyModifier = 1 + this.calculatePsychologyScore(attackingStats, isHome); // Factors 91-100
 
     // Opponent's defensive quality reduces expected goals
     const oppDefenseQuality = 1 - (this.calculateSquadScore(defendingStats) * 0.3);
     const oppTacticalDefense = 1 - (this.calculateTacticalScore(defendingStats, attackingStats) * 0.2);
 
-    // Combine all factors
+    // Combine all 100 factors
     let lambda = this.UCL_AVG_GOALS_PER_TEAM;
     lambda *= attackRate;
     lambda *= Math.sqrt(defenseWeakness); // Square root to prevent extreme values
@@ -351,6 +387,7 @@ export class PredictionEngine {
     lambda *= squadModifier;
     lambda *= tacticalModifier;
     lambda *= managerModifier;
+    lambda *= marketModifier;
     lambda *= psychologyModifier;
     lambda *= oppDefenseQuality;
     lambda *= oppTacticalDefense;
