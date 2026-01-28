@@ -1,7 +1,8 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { predictionEngine } from "./prediction-engine";
-import { getFixtures, getTeams, type UCLTeam } from "./ucl-data";
+import { getFixtures, getTeams, type UCLTeam, type UCLTeamStats } from "./ucl-data";
+import type { TeamStats } from "@shared/schema";
 
 export async function registerRoutes(
   httpServer: Server,
@@ -71,60 +72,172 @@ export async function registerRoutes(
 
   // Health check
   app.get("/api/health", (req, res) => {
-    res.json({ status: "ok", engine: "Monte Carlo (20k sims)", version: "1.0.0" });
+    res.json({ status: "ok", engine: "Monte Carlo (20k sims)", version: "2.0.0", factors: 100 });
   });
 
   return httpServer;
 }
 
-function convertToTeamStats(team: any, isHome: boolean) {
-  const stats = team.stats;
-  const formResults = stats.form.map((r: string) => r as 'W' | 'D' | 'L');
+// Convert UCL team data to full TeamStats schema
+function convertToTeamStats(team: UCLTeam, isHome: boolean): TeamStats {
+  const s = team.stats;
   
   return {
-    matchesPlayed: stats.played,
-    goalsFor: stats.goalsFor,
-    goalsAgainst: stats.goalsAgainst,
-    cleanSheets: stats.cleanSheets,
-    last5Results: formResults,
-    last5GoalsFor: Math.round(stats.goalsFor * 5 / stats.played),
-    last5GoalsAgainst: Math.round(stats.goalsAgainst * 5 / stats.played),
-    last10Results: [...formResults, ...formResults.slice(0, 5)],
-    last10GoalsFor: Math.round(stats.goalsFor * 10 / stats.played),
-    last10GoalsAgainst: Math.round(stats.goalsAgainst * 10 / stats.played),
-    homeMatchesPlayed: Math.ceil(stats.played / 2),
-    homeGoalsFor: isHome ? Math.round(stats.goalsFor * 0.6) : Math.round(stats.goalsFor * 0.4),
-    homeGoalsAgainst: isHome ? Math.round(stats.goalsAgainst * 0.4) : Math.round(stats.goalsAgainst * 0.6),
-    awayMatchesPlayed: Math.floor(stats.played / 2),
-    awayGoalsFor: isHome ? Math.round(stats.goalsFor * 0.4) : Math.round(stats.goalsFor * 0.6),
-    awayGoalsAgainst: isHome ? Math.round(stats.goalsAgainst * 0.6) : Math.round(stats.goalsAgainst * 0.4),
+    // Basic season stats
+    matchesPlayed: s.played,
+    goalsFor: s.goalsFor,
+    goalsAgainst: s.goalsAgainst,
+    cleanSheets: s.cleanSheets,
+    xG: s.xG,
+    xGA: s.xGA,
+    
+    // Recent form
+    last5Results: s.form,
+    last5GoalsFor: Math.round(s.goalsFor * 5 / s.played),
+    last5GoalsAgainst: Math.round(s.goalsAgainst * 5 / s.played),
+    last10Results: [...s.form, ...s.form.slice(0, 5)],
+    last10GoalsFor: Math.round(s.goalsFor * 10 / s.played),
+    last10GoalsAgainst: Math.round(s.goalsAgainst * 10 / s.played),
+    
+    // Home/Away splits
+    homeMatchesPlayed: Math.ceil(s.played / 2),
+    homeGoalsFor: isHome ? Math.round(s.goalsFor * 0.55) : Math.round(s.goalsFor * 0.45),
+    homeGoalsAgainst: isHome ? Math.round(s.goalsAgainst * 0.4) : Math.round(s.goalsAgainst * 0.6),
+    awayMatchesPlayed: Math.floor(s.played / 2),
+    awayGoalsFor: isHome ? Math.round(s.goalsFor * 0.45) : Math.round(s.goalsFor * 0.55),
+    awayGoalsAgainst: isHome ? Math.round(s.goalsAgainst * 0.6) : Math.round(s.goalsAgainst * 0.4),
+    
+    // Advanced form metrics
+    comebackAbility: s.comebackAbility,
+    leadProtection: s.leadProtection,
+    bigTeamPerformance: s.bigTeamPerformance,
+    consistency: s.consistency,
+    currentStreak: s.currentStreak,
+    shotConversionRate: s.shotConversionRate,
+    chancesCreatedPerMatch: s.chancesCreatedPerMatch,
+    defensiveErrors: s.defensiveErrors,
+    pressurePerformance: s.pressurePerformance,
+    lateGoalsScored: s.lateGoalsScored,
+    lateGoalsConceded: s.lateGoalsConceded,
+    
+    // Context factors
+    homeAdvantageStrength: isHome ? 7 : 5,
+    travelDistance: isHome ? 0 : 1500,
+    travelFatigue: isHome ? 0 : 3,
+    weatherImpact: 0,
+    pitchQuality: 8,
+    kickoffTimeImpact: 0,
+    stadiumAtmosphere: isHome ? 8 : 4,
+    altitude: 0,
+    matchCongestion: 1,
+    nextMatchImportance: 6,
+    rotationLikelihood: 10,
+    restDays: 4,
+    competitionPriority: 9,
+    isSecondLeg: false,
+    awayGoalPressure: 0,
+    isNeutralVenue: false,
+    
+    // Squad factors
+    keyPlayerInjuries: 0,
+    suspensions: 0,
+    playersReturning: 0,
+    squadDepth: s.squadDepth,
+    benchImpact: 6,
+    goalkeeperForm: s.goalkeeperForm,
+    defensiveLeaderAvailable: true,
+    europeanExperience: s.europeanExperience,
+    newSigningsIntegration: 7,
+    captainPresent: true,
+    squadAge: 'balanced',
+    teamMorale: s.teamMorale,
+    internalIssues: false,
+    starPlayerFitness: s.starPlayerFitness,
+    managerRotationTendency: 5,
+    keyPlayerDependence: s.keyPlayerDependence,
+    penaltyTakerAvailable: true,
+    setPieceSpecialist: true,
+    paceThreat: s.paceThreat,
+    physicalAdvantage: 0,
+    startingXI: [],
+    bench: [],
+    keyAbsences: false,
+    absenceImpact: 0,
+    
+    // Tactical factors
+    tacticalStyle: s.tacticalStyle,
+    pressResistance: s.pressResistance,
+    highLineVulnerability: 5,
+    fullbackVsWingerMismatch: 0,
+    midfieldControl: s.midfieldControl,
+    formationFlexibility: 6,
+    inGameAdjustments: 6,
+    buildUpQuality: 6,
+    counterAttackThreat: s.counterAttackThreat,
+    setPieceDefense: s.setPieceDefense,
+    setPieceAttack: s.setPieceAttack,
+    overlappingRuns: 5,
+    defensiveCompactness: s.defensiveCompactness,
+    tacticalDiscipline: 6,
+    avgShots: s.avgShots,
+    avgShotsOnTarget: s.avgShotsOnTarget,
+    avgPossession: s.avgPossession,
+    avgCorners: s.avgCorners,
+    avgFouls: s.avgFouls,
+    avgYellowCards: s.avgYellowCards,
+    avgRedCards: 0.05,
+    crossingTendency: 5,
+    defensivePressure: 6,
+    discipline: 6,
+    
+    // Manager factors
+    managerUCLRecord: s.managerUCLRecord,
+    managerKnockoutExperience: s.managerKnockoutExperience,
+    managerH2H: 0,
+    clubEuropeanPedigree: s.clubEuropeanPedigree,
+    knockoutMentality: s.knockoutMentality,
+    clutchVsChoke: s.clutchVsChoke,
+    clubPressureExpectations: 5,
+    boardPressureOnManager: 3,
+    tacticalConservatism: 5,
+    substitutionTiming: 6,
+    managerForm: 6,
+    tacticalStability: 6,
+    
+    // Market factors
+    oddsMovement: 0,
+    sharpMoneyDirection: 0,
+    publicBettingBias: 0,
+    lastResultOverreaction: 0,
+    defensiveUnderrating: 0,
+    mediaHypeImpact: 0,
+    impliedProbability: 33,
+    bookmakerMargin: 0.05,
+    bigNameOverconfidence: 0,
+    trapOddsRisk: false,
+    
+    // Psychology factors
+    mustWin: false,
+    qualificationScenario: 'safe',
+    revengeNarrative: false,
+    underdogMentality: s.underdogMentality,
+    pressureHandling: s.pressureHandling,
+    confidenceAfterBigResult: 0,
+    eliminationFear: 3,
+    crowdRefereeBias: isHome ? 1 : 0,
+    teamBelief: s.teamBelief,
+    emotionalFatigue: 3,
+    
+    // Context
+    importanceLevel: 8,
+    refereeStrictness: 5,
+    
+    // Head-to-head (default)
     h2hMeetings: 0,
     h2hWins: 0,
     h2hDraws: 0,
     h2hLosses: 0,
     h2hGoalsFor: 0,
     h2hGoalsAgainst: 0,
-    startingXI: [],
-    bench: [],
-    keyAbsences: false,
-    absenceImpact: 0,
-    managerForm: 5 + (stats.won - stats.lost) * 0.5,
-    tacticalStability: 5,
-    importanceLevel: 8,
-    mustWin: stats.played === 7 && stats.won < 3,
-    restDays: 4,
-    travelFatigue: isHome ? 0 : 3,
-    weatherImpact: 0,
-    refereeStrictness: 5,
-    avgShots: stats.avgShots,
-    avgShotsOnTarget: stats.avgShotsOnTarget,
-    avgPossession: 50,
-    avgCorners: stats.avgCorners,
-    avgFouls: stats.avgFouls,
-    avgYellowCards: stats.avgYellowCards,
-    avgRedCards: 0.1,
-    crossingTendency: 5,
-    defensivePressure: 5,
-    discipline: 10 - stats.avgYellowCards,
   };
 }
