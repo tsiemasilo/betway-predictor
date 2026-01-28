@@ -1,38 +1,53 @@
-import { type User, type InsertUser } from "@shared/schema";
-import { randomUUID } from "crypto";
+import { eq } from "drizzle-orm";
+import { drizzle } from "drizzle-orm/node-postgres";
+import pg from "pg";
+import * as schema from "@shared/schema";
+import type { InsertMatchScenario, MatchScenario } from "@shared/schema";
 
-// modify the interface with any CRUD methods
-// you might need
+const { Pool } = pg;
+
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+});
+
+const db = drizzle({ client: pool, schema });
 
 export interface IStorage {
-  getUser(id: string): Promise<User | undefined>;
-  getUserByUsername(username: string): Promise<User | undefined>;
-  createUser(user: InsertUser): Promise<User>;
+  // Match scenarios
+  createMatchScenario(scenario: InsertMatchScenario): Promise<MatchScenario>;
+  getMatchScenario(id: string): Promise<MatchScenario | undefined>;
+  getAllMatchScenarios(): Promise<MatchScenario[]>;
+  updateMatchScenarioPrediction(id: string, predictionResults: any): Promise<MatchScenario | undefined>;
+  deleteMatchScenario(id: string): Promise<void>;
 }
 
-export class MemStorage implements IStorage {
-  private users: Map<string, User>;
-
-  constructor() {
-    this.users = new Map();
+export class DbStorage implements IStorage {
+  async createMatchScenario(scenario: InsertMatchScenario): Promise<MatchScenario> {
+    const [created] = await db.insert(schema.matchScenarios).values(scenario).returning();
+    return created;
   }
 
-  async getUser(id: string): Promise<User | undefined> {
-    return this.users.get(id);
+  async getMatchScenario(id: string): Promise<MatchScenario | undefined> {
+    const [scenario] = await db.select().from(schema.matchScenarios).where(eq(schema.matchScenarios.id, id));
+    return scenario;
   }
 
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
-    );
+  async getAllMatchScenarios(): Promise<MatchScenario[]> {
+    return db.select().from(schema.matchScenarios).orderBy(schema.matchScenarios.createdAt);
   }
 
-  async createUser(insertUser: InsertUser): Promise<User> {
-    const id = randomUUID();
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
-    return user;
+  async updateMatchScenarioPrediction(id: string, predictionResults: any): Promise<MatchScenario | undefined> {
+    const [updated] = await db
+      .update(schema.matchScenarios)
+      .set({ predictionResults })
+      .where(eq(schema.matchScenarios.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteMatchScenario(id: string): Promise<void> {
+    await db.delete(schema.matchScenarios).where(eq(schema.matchScenarios.id, id));
   }
 }
 
-export const storage = new MemStorage();
+export const storage = new DbStorage();
